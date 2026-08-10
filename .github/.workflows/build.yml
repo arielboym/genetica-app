@@ -7,17 +7,18 @@ on:
 
 jobs:
   build:
-    name: Build APK
-    runs-on: ubuntu-latest # שרת לינוקס בענן
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: genetic-app
 
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install dependencies
         run: npm install
@@ -44,4 +45,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: genetic-app-apk
-          path: android/app/build/outputs/apk/debug/app-debug.apk
+          path: genetic-app/android/app/build/outputs/apk/debug/app-debug.apk
