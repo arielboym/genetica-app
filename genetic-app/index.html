@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Genetic Test Reminders</title>
+    <meta name="theme-color" content="#4f46e5">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-50 font-sans text-slate-800 pb-20 select-none">
+    <header class="bg-white border-b px-4 py-3 flex justify-between items-center sticky top-0 z-40 shadow-sm">
+        <h1 class="text-xl font-bold text-indigo-700 flex items-center gap-2">
+            <i data-lucide="dna" class="w-6 h-6"></i> Genetic Tests
+        </h1>
+        <button id="btn-permission" class="bg-amber-100 hover:bg-amber-200 text-amber-800 px-3 py-1.5 rounded-full text-xs font-bold transition flex items-center gap-1">
+            <i data-lucide="bell-ring" class="w-3.5 h-3.5"></i> אישור התראות
+        </button>
+    </header>
+
+    <main class="p-4 max-w-lg mx-auto">
+        <section id="page-add" class="page-content space-y-4">
+            <h2 class="text-lg font-bold text-slate-700">הוספת בדיקה חדשה</h2>
+            
+            <div class="bg-blue-50 border border-blue-200 rounded-xl p-3 flex justify-between items-center">
+                <div class="text-xs text-blue-800 font-medium">כלי לבדיקת מערכת ההתראות:</div>
+                <button id="btn-test-notification" class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-3 py-1.5 rounded-lg font-bold shadow transition flex items-center gap-1">
+                    <i data-lucide="timer" class="w-3.5 h-3.5"></i> התראה בעוד דקה
+                </button>
+            </div>
+
+            <form id="add-form" class="bg-white p-4 rounded-xl shadow-sm border space-y-4">
+                <div>
+                    <label class="block text-sm font-medium mb-1">שם הבדיקה / מזהה מטופלת</label>
+                    <input type="text" id="test-name" required class="w-full border rounded-lg p-2.5 outline-none focus:ring-2 focus:ring-indigo-500">
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium mb-1">סוג הבדיקה</label>
+                    <div class="grid grid-cols-3 gap-2">
+                        <label class="border rounded-lg p-2 text-center cursor-pointer has-[:checked]:border-purple-600 has-[:checked]:bg-purple-50">
+                            <input type="radio" name="test-type" value="genome" checked class="hidden test-type-radio">
+                            <span class="font-bold text-xs text-purple-900">גנום</span>
+                        </label>
+                        <label class="border rounded-lg p-2 text-center cursor-pointer has-[:checked]:border-teal-600 has-[:checked]:bg-teal-50">
+                            <input type="radio" name="test-type" value="molecular" class="hidden test-type-radio">
+                            <span class="font-bold text-xs text-teal-900">מולקולרית</span>
+                        </label>
+                        <label class="border rounded-lg p-2 text-center cursor-pointer has-[:checked]:border-slate-600 has-[:checked]:bg-slate-100">
+                            <input type="radio" name="test-type" value="other" class="hidden test-type-radio">
+                            <span class="font-bold text-xs text-slate-800">אחר</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="border-t pt-3 space-y-2">
+                    <label class="text-xs font-bold text-slate-700 flex items-center gap-1.5 cursor-pointer">
+                        <input type="checkbox" id="enable-work-reminder" checked class="w-4 h-4 text-indigo-600 rounded">
+                        תזכורת כניסה לעבודה
+                    </label>
+                    <div id="work-inputs-container" class="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                            <span class="text-slate-500 block mb-1">בעוד (ימים):</span>
+                            <input type="number" id="work-days" min="0" value="1" class="w-full border rounded p-1.5">
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block mb-1">בשעה:</span>
+                            <input type="time" id="work-time" value="09:00" class="w-full border rounded p-1.5">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="border-t pt-3 space-y-2">
+                    <label class="text-xs font-bold text-slate-700 block">תזכורת בדיקת תוצאה</label>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <div>
+                            <span class="text-slate-500 block mb-1">בעוד (ימים):</span>
+                            <input type="number" id="result-days" min="0" value="17" class="w-full border rounded p-1.5">
+                        </div>
+                        <div>
+                            <span class="text-slate-500 block mb-1">בשעה:</span>
+                            <input type="time" id="result-time" value="09:00" class="w-full border rounded p-1.5">
+                        </div>
+                    </div>
+                </div>
+
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 rounded-lg shadow-md transition flex justify-center items-center gap-2">
+                    <i data-lucide="save" class="w-5 h-5"></i> שמור ותזמן התראה
+                </button>
+            </form>
+        </section>
+
+        <section id="page-work" class="page-content hidden space-y-3"><div id="work-list" class="space-y-3"></div></section>
+        <section id="page-results" class="page-content hidden space-y-3"><div id="results-list" class="space-y-3"></div></section>
+        <section id="page-history" class="page-content hidden space-y-4">
+            <select id="btn-clear-history" class="text-xs border rounded-lg p-2 mb-2"><option value="">ניקוי...</option><option value="all">מחק הכל</option></select>
+            <div id="history-list" class="space-y-3"></div>
+        </section>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-2 z-40">
+        <button id="tab-add" class="tab-btn text-indigo-600 flex flex-col items-center w-full"><i data-lucide="plus-square" class="w-5 h-5"></i><span class="text-[10px] mt-1">הוספה</span></button>
+        <button id="tab-work" class="tab-btn text-slate-400 flex flex-col items-center w-full relative"><i data-lucide="activity" class="w-5 h-5"></i><span class="text-[10px] mt-1">עבודה</span><span id="work-badge" class="hidden absolute top-0 right-3 bg-red-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
+        <button id="tab-results" class="tab-btn text-slate-400 flex flex-col items-center w-full relative"><i data-lucide="file-check" class="w-5 h-5"></i><span class="text-[10px] mt-1">תוצאות</span><span id="results-badge" class="hidden absolute top-0 right-3 bg-red-500 text-white text-[9px] w-4 h-4 rounded-full flex items-center justify-center">0</span></button>
+        <button id="tab-history" class="tab-btn text-slate-400 flex flex-col items-center w-full"><i data-lucide="history" class="w-5 h-5"></i><span class="text-[10px] mt-1">היסטוריה</span></button>
+    </nav>
+    <script type="module" src="/main.js"></script>
+</body>
+</html>
